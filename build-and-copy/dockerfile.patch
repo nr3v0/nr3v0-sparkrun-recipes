@@ -1,0 +1,13 @@
+diff --git a/Dockerfile b/Dockerfile
+index fb5890a..7382c81 100644
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -2,7 +2,7 @@
+ 
+ # Limit build parallelism to reduce OOM situations
+ ARG BUILD_JOBS=16
+-ARG CUDA_IMAGE=nvidia/cuda:13.0.2-devel-ubuntu24.04
++ARG CUDA_IMAGE=nvidia/cuda:13.3.1-devel-ubuntu24.04
+ ARG NCCL_NVCC_GENCODE="-gencode=arch=compute_121,code=sm_121"
+ 
+ # =========================================================
