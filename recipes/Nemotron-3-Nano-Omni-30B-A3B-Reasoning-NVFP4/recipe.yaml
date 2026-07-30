@@ -1,0 +1,59 @@
+recipe_version: '3'
+name: Nemotron-3-Nano-Omni-NVFP4-cuda-13_3_1-vllm-0_25-Optimized
+description: vLLM serving Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4 using cuda 13.3.1 and vllm 0.25
+model: nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4
+runtime: vllm
+container: vllm/vllm-openai:vllm-x86_64-cu13-0.25.1-7a33ba9
+mods:
+  - vllm-audio
+  - gb10-ssu
+defaults:
+  host: 0.0.0.0
+  port: 8000
+  tensor_parallel: 1
+  gpu_memory_utilization: 0.6
+  max_model_len: 131072
+  max_num_batched_tokens: 32768
+  max_num_seqs: 5
+  kv_cache_dtype: fp8
+  quantization: nvfp4
+env:
+  VLLM_ALLOW_LONG_MAX_MODEL_LEN: 1
+  VLLM_WORKER_MULTIPROC_METHOD: spawn
+  TORCH_ALLOW_TF32_CUBLAS: 1
+  TORCH_ALLOW_TF32_CUDNN: 1
+  TORCH_FLOAT32_MATMUL_PRECISION: high
+  VLLM_FLOAT32_MATMUL_PRECISION: high
+  FASTSAFETENSORS_NOGDS: 1
+  HF_HUB_OFFLINE: 0
+#  VLLM_MARLIN_USE_ATOMIC_ADD: '1'
+#  VLLM_NVFP4_GEMM_BACKEND: marlin
+#  OMP_NUM_THREADS: '4'
+#  CUDA_MANAGED_FORCE_DEVICE_ALLOC: '1'
+#  PYTORCH_CUDA_ALLOC_CONF: expandable_segments:True
+#  VLLM_USE_FLASHINFER_MOE_FP4: '0'
+command: |
+  vllm serve {model} \
+    -tp {tensor_parallel} \
+    --served-model-name nemotron-3-nano-omni \
+    --host {host} \
+    --port {port} \
+    --dtype auto \
+    --load-format fastsafetensors \
+    --kv-cache-dtype {kv_cache_dtype} \
+    --trust-remote-code \
+    --enable-prefix-caching \
+    --enable-chunked-prefill \
+    --enable-auto-tool-choice \
+    --tool-call-parser qwen3_coder \
+    --gpu-memory-utilization {gpu_memory_utilization} \
+    --max-model-len {max_model_len} \
+    --max-num-seqs {max_num_seqs} \
+    --max-num-batched-tokens {max_num_batched_tokens} \
+    --quantization {quantization} \
+    --video-pruning-rate 0.5 \
+    --limit-mm-per-prompt '{"video":1,"image":4,"audio":1}' \
+    --media-io-kwargs '{"video":{"fps":2,"num_frames":256}}' \
+    --allowed-local-media-path=/ \
+    --reasoning-parser nemotron_v3 \
+    --generation-config vllm
