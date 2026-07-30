@@ -1,8 +1,8 @@
-# therevoman-sparkrun-recipes
+# naterevo-sparkrun-recipes
 
-A [sparkrun](https://sparkrun.dev) recipe registry for the `therevoman` team/project,
-targeting NVIDIA DGX Spark. It hosts three registries — `therevoman` (stable),
-`therevoman-fast`, and `therevoman-experimental` — each with its own recipes (and
+A [sparkrun](https://sparkrun.dev) recipe registry for the `naterevo` team/project,
+targeting NVIDIA DGX Spark. It hosts three registries — `naterevo` (stable),
+`naterevo-fast`, and `naterevo-experimental` — each with its own recipes (and
 optional tuning configs, benchmark profiles, and shared mods) that `sparkrun`
 can auto-discover and install via `@<registry-name>/<recipe-name>` syntax.
 
@@ -25,17 +25,17 @@ hardware. Keeping recipes in a dedicated git repo lets them be:
 .
 ├── .sparkrun/
 │   └── registry.yaml     # registry manifest declaring all three registries below
-├── stable/               # therevoman — production-ready, vetted recipes
+├── stable/               # naterevo — production-ready, vetted recipes
 │   ├── recipes/
 │   ├── tuning/
 │   ├── benchmarking/
 │   └── mods/
-├── fast/                 # therevoman-fast — throughput/latency-optimized recipes
+├── fast/                 # naterevo-fast — throughput/latency-optimized recipes
 │   ├── recipes/
 │   ├── tuning/
 │   ├── benchmarking/
 │   └── mods/
-├── experimental/         # therevoman-experimental — unvetted, hidden by default
+├── experimental/         # naterevo-experimental — unvetted, hidden by default
 │   ├── recipes/
 │   ├── tuning/
 │   ├── benchmarking/
@@ -49,14 +49,14 @@ benchmark profiles), and `mods/` (optional shared mods).
 
 ## Registries
 
-| Registry                  | Path            | Visible by default    | Purpose                                          |
-|---------------------------|-----------------|------------------------|---------------------------------------------------|
-| `therevoman`               | `stable/`       | Yes                    | Production-ready, vetted recipes                 |
-| `therevoman-fast`          | `fast/`         | Yes                    | Recipes tuned for throughput/latency, less vetted |
-| `therevoman-experimental`  | `experimental/` | No (`visible: false`) | Work-in-progress / risky recipes, opt-in only     |
+| Registry                 | Path            | Visible by default    | Purpose                                           |
+|--------------------------|-----------------|------------------------|----------------------------------------------------|
+| `naterevo`               | `stable/`       | Yes                    | Production-ready, vetted recipes                  |
+| `naterevo-fast`          | `fast/`         | Yes                    | Recipes tuned for throughput/latency, less vetted  |
+| `naterevo-experimental`  | `experimental/` | No (`visible: false`) | Work-in-progress / risky recipes, opt-in only      |
 
-Hidden registries (`therevoman-experimental`) don't show up in default listings but
-are still usable via explicit `@therevoman-experimental/<recipe-name>` references
+Hidden registries (`naterevo-experimental`) don't show up in default listings but
+are still usable via explicit `@naterevo-experimental/<recipe-name>` references
 or with `--all`.
 
 ## Usage
@@ -64,27 +64,27 @@ or with `--all`.
 ### Add a registry to sparkrun
 
 ```bash
-sparkrun registry add therevoman <git-url-of-this-repo>
+sparkrun registry add naterevo <git-url-of-this-repo>
 ```
 
 Because all three registries live in the same repo, adding it once makes
-`therevoman`, `therevoman-fast`, and `therevoman-experimental` all available — sparkrun uses
+`naterevo`, `naterevo-fast`, and `naterevo-experimental` all available — sparkrun uses
 sparse checkout so it only fetches the subdirectories each registry declares.
 
 ### List available recipes
 
 ```bash
-sparkrun recipe list @therevoman               # stable
-sparkrun recipe list @therevoman-fast          # fast
-sparkrun recipe list @therevoman-experimental --all   # experimental (hidden by default)
+sparkrun recipe list @naterevo               # stable
+sparkrun recipe list @naterevo-fast          # fast
+sparkrun recipe list @naterevo-experimental --all   # experimental (hidden by default)
 ```
 
 ### Run a recipe
 
 ```bash
-sparkrun run @therevoman/<recipe-name>
-sparkrun run @therevoman-fast/<recipe-name>
-sparkrun run @therevoman-experimental/<recipe-name>
+sparkrun run @naterevo/<recipe-name>
+sparkrun run @naterevo-fast/<recipe-name>
+sparkrun run @naterevo-experimental/<recipe-name>
 ```
 
 ### Adding a new recipe
@@ -112,11 +112,11 @@ sparkrun run @therevoman-experimental/<recipe-name>
    add it under that registry's `tuning/`, `benchmarking/`, or `mods/`
    respectively and reference it from the recipe.
 4. Commit and push. `sparkrun` picks up changes the next time the registry
-   is refreshed (`sparkrun registry update therevoman`).
+   is refreshed (`sparkrun registry update naterevo`).
 
 ## Naming conventions
 
-- Registry names (`therevoman`, `therevoman-fast`, `therevoman-experimental`) avoid reserved
+- Registry names (`naterevo`, `naterevo-fast`, `naterevo-experimental`) avoid reserved
   prefixes (`sparkrun`, `official`, `arena`, `spark-arena`) as required by the
   sparkrun registry guidelines, and use suffixes to indicate maturity level.
 - Recipe files should be named descriptively after the model and serving

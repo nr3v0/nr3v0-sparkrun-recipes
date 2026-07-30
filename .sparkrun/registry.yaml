@@ -1,17 +1,17 @@
 registries:
-  - name: therevoman
+  - name: naterevo
     description: Production-ready sparkrun recipes for DGX Spark
     recipes: stable/recipes
     tuning: stable/tuning
     benchmarks: stable/benchmarking
     mods: stable/mods
-  - name: therevoman-fast
+  - name: naterevo-fast
     description: Fast-path recipes optimized for throughput/latency, less vetted than stable
     recipes: fast/recipes
     tuning: fast/tuning
     benchmarks: fast/benchmarking
     mods: fast/mods
-  - name: therevoman-experimental
+  - name: naterevo-experimental
     description: Experimental recipes — use at your own risk
     recipes: experimental/recipes
     tuning: experimental/tuning
