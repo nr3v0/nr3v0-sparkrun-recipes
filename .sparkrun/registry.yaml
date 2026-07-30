@@ -1,0 +1,7 @@
+registries:
+  - name: nrevo
+    description: nrevo's curated sparkrun recipes for DGX Spark
+    recipes: recipes
+    tuning: tuning
+    benchmarks: benchmarking
+    mods: mods
