@@ -1,9 +1,10 @@
 # nrevo-sparkrun-recipes
 
 A [sparkrun](https://sparkrun.dev) recipe registry for the `nrevo` team/project,
-targeting NVIDIA DGX Spark. It hosts recipes (and optional tuning configs,
-benchmark profiles, and shared mods) that `sparkrun` can auto-discover and
-install via the `@nrevo/recipe-name` syntax.
+targeting NVIDIA DGX Spark. It hosts three registries — `nrevo` (stable),
+`nrevo-fast`, and `nrevo-experimental` — each with its own recipes (and
+optional tuning configs, benchmark profiles, and shared mods) that `sparkrun`
+can auto-discover and install via `@<registry-name>/<recipe-name>` syntax.
 
 ## Purpose
 
@@ -23,40 +24,75 @@ hardware. Keeping recipes in a dedicated git repo lets them be:
 ```
 .
 ├── .sparkrun/
-│   └── registry.yaml     # registry manifest (required for auto-discovery)
-├── recipes/              # recipe YAML files (model + container + run command)
-├── tuning/               # optional: kernel/runtime tuning configs (e.g. sglang)
-├── benchmarking/         # optional: benchmark profile YAML files
-├── mods/                 # optional: shared mods (dirs containing run.sh)
+│   └── registry.yaml     # registry manifest declaring all three registries below
+├── stable/               # nrevo — production-ready, vetted recipes
+│   ├── recipes/
+│   ├── tuning/
+│   ├── benchmarking/
+│   └── mods/
+├── fast/                 # nrevo-fast — throughput/latency-optimized recipes
+│   ├── recipes/
+│   ├── tuning/
+│   ├── benchmarking/
+│   └── mods/
+├── experimental/         # nrevo-experimental — unvetted, hidden by default
+│   ├── recipes/
+│   ├── tuning/
+│   ├── benchmarking/
+│   └── mods/
 └── README.md
 ```
 
+Each subdirectory follows the same layout: `recipes/` (recipe YAML files),
+`tuning/` (optional kernel/runtime tuning configs), `benchmarking/` (optional
+benchmark profiles), and `mods/` (optional shared mods).
+
+## Registries
+
+| Registry             | Path            | Visible by default | Purpose                                             |
+|-----------------------|-----------------|---------------------|------------------------------------------------------|
+| `nrevo`               | `stable/`       | Yes                 | Production-ready, vetted recipes                     |
+| `nrevo-fast`          | `fast/`         | Yes                 | Recipes tuned for throughput/latency, less vetted     |
+| `nrevo-experimental`  | `experimental/` | No (`visible: false`) | Work-in-progress / risky recipes, opt-in only       |
+
+Hidden registries (`nrevo-experimental`) don't show up in default listings but
+are still usable via explicit `@nrevo-experimental/<recipe-name>` references
+or with `--all`.
+
 ## Usage
 
-### Add this registry to sparkrun
+### Add a registry to sparkrun
 
 ```bash
 sparkrun registry add nrevo <git-url-of-this-repo>
 ```
 
-Once added, recipes in `recipes/` become available as `@nrevo/<recipe-name>`.
+Because all three registries live in the same repo, adding it once makes
+`nrevo`, `nrevo-fast`, and `nrevo-experimental` all available — sparkrun uses
+sparse checkout so it only fetches the subdirectories each registry declares.
 
 ### List available recipes
 
 ```bash
-sparkrun recipe list @nrevo
+sparkrun recipe list @nrevo               # stable
+sparkrun recipe list @nrevo-fast          # fast
+sparkrun recipe list @nrevo-experimental --all   # experimental (hidden by default)
 ```
 
 ### Run a recipe
 
 ```bash
 sparkrun run @nrevo/<recipe-name>
+sparkrun run @nrevo-fast/<recipe-name>
+sparkrun run @nrevo-experimental/<recipe-name>
 ```
 
 ### Adding a new recipe
 
-1. Create a new YAML file under `recipes/`, named after the model/variant
-   (e.g. `recipes/my-model-vllm.yaml`).
+1. Decide which registry it belongs in — `stable/`, `fast/`, or
+   `experimental/` — and create a new YAML file under that registry's
+   `recipes/` directory, named after the model/variant
+   (e.g. `stable/recipes/my-model-vllm.yaml`).
 2. Follow the [sparkrun recipe format](https://sparkrun.dev/recipes/format/):
    at minimum, a `model` (HuggingFace identifier) and `container` (image URI),
    plus a `command` template. Example:
@@ -73,15 +109,16 @@ sparkrun run @nrevo/<recipe-name>
    ```
 
 3. If the recipe needs runtime tuning, a benchmark profile, or a shared mod,
-   add it under `tuning/`, `benchmarking/`, or `mods/` respectively and
-   reference it from the recipe.
+   add it under that registry's `tuning/`, `benchmarking/`, or `mods/`
+   respectively and reference it from the recipe.
 4. Commit and push. `sparkrun` picks up changes the next time the registry
    is refreshed (`sparkrun registry update nrevo`).
 
 ## Naming conventions
 
-- The registry name (`nrevo`) avoids reserved prefixes (`sparkrun`, `official`,
-  `arena`, `spark-arena`) as required by the sparkrun registry guidelines.
+- Registry names (`nrevo`, `nrevo-fast`, `nrevo-experimental`) avoid reserved
+  prefixes (`sparkrun`, `official`, `arena`, `spark-arena`) as required by the
+  sparkrun registry guidelines, and use suffixes to indicate maturity level.
 - Recipe files should be named descriptively after the model and serving
   engine, e.g. `<model>-<engine>.yaml`.
 

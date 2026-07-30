@@ -1,7 +1,20 @@
 registries:
   - name: nrevo
-    description: nrevo's curated sparkrun recipes for DGX Spark
-    recipes: recipes
-    tuning: tuning
-    benchmarks: benchmarking
-    mods: mods
+    description: Production-ready sparkrun recipes for DGX Spark
+    recipes: stable/recipes
+    tuning: stable/tuning
+    benchmarks: stable/benchmarking
+    mods: stable/mods
+  - name: nrevo-fast
+    description: Fast-path recipes optimized for throughput/latency, less vetted than stable
+    recipes: fast/recipes
+    tuning: fast/tuning
+    benchmarks: fast/benchmarking
+    mods: fast/mods
+  - name: nrevo-experimental
+    description: Experimental recipes — use at your own risk
+    recipes: experimental/recipes
+    tuning: experimental/tuning
+    benchmarks: experimental/benchmarking
+    mods: experimental/mods
+    visible: false
