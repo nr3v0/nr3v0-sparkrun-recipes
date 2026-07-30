@@ -1,17 +1,17 @@
 registries:
-  - name: naterevo
+  - name: nr3v0
     description: Production-ready sparkrun recipes for DGX Spark
     recipes: stable/recipes
     tuning: stable/tuning
     benchmarks: stable/benchmarking
     mods: stable/mods
-  - name: naterevo-fast
+  - name: nr3v0-fast
     description: Fast-path recipes optimized for throughput/latency, less vetted than stable
     recipes: fast/recipes
     tuning: fast/tuning
     benchmarks: fast/benchmarking
     mods: fast/mods
-  - name: naterevo-experimental
+  - name: nr3v0-experimental
     description: Experimental recipes — use at your own risk
     recipes: experimental/recipes
     tuning: experimental/tuning
