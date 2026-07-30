@@ -1,0 +1,43 @@
+recipe_version: '1'
+name: Nemotron-3-Nano-30B-A3B-NVFP4-cuda-13_3_1-vllm-0_25
+description: vLLM serving Nemotron-3-Nano-30B-A3B-NVFP4 using cuda 13.3.1 and vllm 0.25
+model: nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-NVFP4
+runtime: vllm
+container: vllm/vllm-openai:vllm-x86_64-cu13-0.25.1-7a33ba9
+defaults:
+  host: 0.0.0.0
+  port: 8000
+  gpu_memory_utilization: 0.83
+  max_model_len: 262144
+  max_num_batched_tokens: 8192
+  max_num_seqs: 2
+  kv_cache_dtype: fp8
+  quantization: nvfp4
+env:
+  VLLM_ALLOW_LONG_MAX_MODEL_LEN: 1
+  VLLM_WORKER_MULTIPROC_METHOD: spawn
+  TORCH_ALLOW_TF32_CUBLAS: 1
+  TORCH_ALLOW_TF32_CUDNN: 1
+  TORCH_FLOAT32_MATMUL_PRECISION: high
+  VLLM_FLOAT32_MATMUL_PRECISION: high
+  FASTSAFETENSORS_NOGDS: 1
+command: |
+  vllm serve {model} \
+    --served-model-name nemotron-3-nano \
+    --host {host} \
+    --port {port} \
+    --dtype auto \
+    --load-format fastsafetensors \
+    --kv-cache-dtype {kv_cache_dtype} \
+    --trust-remote-code \
+    --gpu-memory-utilization {gpu_memory_utilization} \
+    --enable-chunked-prefill \
+    --enable-prefix-caching \
+    --max-num-batched-tokens {max_num_batched_tokens} \
+    --max-num-seqs {max_num_seqs} \
+    --max-model-len {max_model_len} \
+    --quantization {quantization} \
+    --reasoning-parser nemotron_v3 \
+    --enable-auto-tool-choice \
+    --tool-call-parser qwen3_coder \
+    --generation-config vllm

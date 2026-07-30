@@ -1,0 +1,35 @@
+recipe_version: '1'
+name: Gemma-4-26B-A4B-NVFP4-cuda-13_3_1-vllm-0_25
+description: vLLM serving Gemma-4-26B-A4B-NVFP4 using cuda 13.3.1 and vllm 0.25
+model: nvidia/Gemma-4-26B-A4B-NVFP4
+runtime: vllm
+container: vllm/vllm-openai:vllm-x86_64-cu13-0.25.1-7a33ba9
+defaults:
+  host: 0.0.0.0
+  port: 8000
+  gpu_memory_utilization: 0.70
+  max_model_len: 32768
+  max_num_batched_tokens: 1024
+  max_num_seqs: 1
+  kv_cache_dtype: fp8
+  quantization: nvfp4
+env:
+  VLLM_ALLOW_LONG_MAX_MODEL_LEN: 1
+  VLLM_WORKER_MULTIPROC_METHOD: spawn
+command: |
+  vllm serve {model} \
+    --served-model-name gemma4-small \
+    --host {host} \
+    --port {port} \
+    --dtype auto \
+    --reasoning-parser gemma4 \
+    --tool-call-parser gemma4 \
+    --kv-cache-dtype {kv_cache_dtype} \
+    --trust-remote-code \
+    --gpu-memory-utilization {gpu_memory_utilization} \
+    --max-num-seqs {max_num_seqs} \
+    --max-model-len {max_model_len} \
+    --max-num-batched-tokens {max_num_batched_tokens} \
+    --max-tokens-per-mmitem 0 \
+    --quantization {quantization} \
+    --enable-auto-tool-choice

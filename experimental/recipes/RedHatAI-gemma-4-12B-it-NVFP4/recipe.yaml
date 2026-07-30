@@ -1,0 +1,33 @@
+recipe_version: '1'
+name: RedHatAI-gemma-4-12B-it-NVFP4-cuda-13_3_1-vllm-0_25
+description: vLLM serving RedHatAI/gemma-4-12B-it-NVFP4 using cuda 13.3.1 and vllm 0.25
+model: RedHatAI/gemma-4-12B-it-NVFP4
+runtime: vllm
+container: vllm/vllm-openai:vllm-x86_64-cu13-0.25.1-7a33ba9
+defaults:
+  host: 0.0.0.0
+  port: 8000
+  gpu_memory_utilization: 0.82
+  max_model_len: 16384
+  max_num_batched_tokens: 2496
+  max_num_seqs: 4
+env:
+  VLLM_WORKER_MULTIPROC_METHOD: spawn
+command: |
+  vllm serve {model} \
+    --served-model-name gemma4-small \
+    --host {host} \
+    --port {port} \
+    --dtype auto \
+    --trust-remote-code \
+    --reasoning-parser gemma4 \
+    --tool-call-parser gemma4 \
+    --enable-auto-tool-choice \
+    --chat-template examples/tool_chat_template_gemma4.jinja \
+    --limit-mm-per-prompt '{"image": 0, "audio": 0}' \
+    --async-scheduling \
+    --max-num-seqs {max_num_seqs} \
+    --max-model-len {max_model_len} \
+    --max-num-batched-tokens {max_num_batched_tokens} \
+    --gpu-memory-utilization {gpu_memory_utilization} \
+    --generation-config vllm
