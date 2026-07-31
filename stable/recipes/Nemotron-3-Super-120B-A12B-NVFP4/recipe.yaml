@@ -10,10 +10,10 @@ defaults:
   host: 0.0.0.0
   port: 8000
   tensor_parallel: 1
-  gpu_memory_utilization: 0.85
+  gpu_memory_utilization: 0.84
   max_model_len: 262144
   max_num_batched_tokens: 2048
-  max_num_seqs: 2
+  max_num_seqs: 4
   kv_cache_dtype: fp8
   quantization: nvfp4
 env:
@@ -42,7 +42,7 @@ command: |
     --max-num-batched-tokens {max_num_batched_tokens} \
     --mamba-ssm-cache-dtype float32 \
     --quantization {quantization} \
-    --speculative-config '{"method":"mtp","num_speculative_tokens":2}' \
+    --speculative-config '{"method":"mtp","num_speculative_tokens":3}' \
     --reasoning-parser nemotron_v3 \
     --enable-auto-tool-choice \
     --tool-call-parser qwen3_coder \
