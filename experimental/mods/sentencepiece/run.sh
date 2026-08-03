@@ -2,4 +2,4 @@
 
 set -e
 
-python -m pip install -U sentencepiece tiktoken tokenizers
+python3 -m pip install -U sentencepiece tiktoken tokenizers
