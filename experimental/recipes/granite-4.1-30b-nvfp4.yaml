@@ -24,5 +24,4 @@ command: |
     --trust-remote-code \
     --gpu-memory-utilization {gpu_memory_utilization} \
     --max-model-len {max_model_len} \
-    --quantization {quantization} \
-    --enable-auto-tool-choice
+    --quantization {quantization} 
