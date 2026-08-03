@@ -4,6 +4,8 @@ description: vLLM serving granite-4.1-30b-nvfp4
 model: revoman/granite-4.1-30b-nvfp4
 runtime: vllm
 container: vllm/vllm-openai:vllm-x86_64-cu13-0.25.1-7a33ba9
+mods:
+  - sentencepiece
 defaults:
   host: 0.0.0.0
   port: 8000
