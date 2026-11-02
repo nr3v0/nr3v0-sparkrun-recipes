@@ -3,7 +3,7 @@ name: Nemotron-3-Super-NVFP4-cuda-13_4_0-vllm-0_32-Optimized
 description: vLLM serving Nemotron-3-Super-120B using cuda 13.4.3 and vllm 0.32.0
 model: nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-NVFP4
 runtime: vllm
-container: quay.openshift.works/vllm/vllm-openai-gb10:latest
+container: quay.openshift.works/vllm/vllm-openai-gb10:v0.32.0
 #mods:
 #  - gb10-ssu
 defaults:
