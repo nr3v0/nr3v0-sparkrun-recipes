@@ -1,4 +1,4 @@
-recipe_version: '2'
+recipe_version: '1'
 name: Nemotron-3-Super-FP8-cuda-13_3_1-vllm-0_25-Optimized
 description: vLLM serving Nemotron-3-Super-120B using cuda 13.3.1 and vllm 0.25
 model: nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-FP8
