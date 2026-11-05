@@ -23,10 +23,10 @@ defaults:
   block_size: 256
   max_model_len: 500000
   max_num_seqs: 4
-  max_num_batched_tokens: 4096
-  num_speculative_tokens: 5
-  kv_cache_memory_bytes: 8G
-  gpu_memory_utilization: 0.83
+  max_num_batched_tokens: 8192
+  num_speculative_tokens: 3
+  kv_cache_memory_bytes: 16G
+  gpu_memory_utilization: 0.82
 
 env:
   # Bound cached CUDA reservations during A16 preparation on Spark's shared RAM.
